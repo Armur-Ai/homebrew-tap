@@ -132,6 +132,11 @@ jobs:
             def install
               binary = Dir["pentestswarm-*"].first
               bin.install binary => "pentestswarm"
+
+              # Shell completions — Cobra auto-registers a \`completion <shell>\`
+              # subcommand on the binary; Homebrew's helper invokes it and
+              # installs bash/zsh/fish completions to the right location.
+              generate_completions_from_executable(bin/"pentestswarm", "completion")
             end
 
             def caveats
