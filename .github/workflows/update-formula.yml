@@ -141,8 +141,12 @@ jobs:
                   pentestswarm scan example.com
 
                 Optional security tools the swarm calls out to:
-                  brew install nmap sqlmap gobuster trufflehog gitleaks
-                  pip install semgrep
+                  brew install nmap sqlmap gobuster semgrep trufflehog gitleaks
+
+                Config + state directory:
+                  ~/.pentestswarm/   (config.yaml, fp-cache.jsonl, findings.db)
+                \`brew uninstall\` does NOT remove this directory. Remove it
+                manually with \`rm -rf ~/.pentestswarm\` if you want a clean slate.
 
                 Or run the bundled Docker image (all 16 tools pre-installed):
                   docker run --rm -e PENTESTSWARM_ORCHESTRATOR_API_KEY=\$KEY \\\\

@@ -1,0 +1,50 @@
+name: CI
+
+# Quality gates for the tap. Runs on every push and PR.
+#
+#   * audit  — `brew audit --strict` catches formula-style regressions
+#               (deprecated APIs, missing fields, lint nits) before the
+#               next upstream release auto-regenerates the formula and
+#               propagates a broken state to users.
+#
+#   * install — downloads the actual release binary, installs it via
+#                brew, and runs the formula's `test do` block. Catches
+#                "release URL broke" / "SHA mismatch" / "binary won't
+#                execute on this arch" regressions that brew audit
+#                cannot detect by static analysis alone.
+#
+# Why macos-latest only (for now): the Homebrew formula's binary
+# downloads work on linuxbrew, but linuxbrew setup adds a non-trivial
+# layer of CI plumbing. macOS is where most users install via brew;
+# Linux users have AUR / Docker / GHCR. Linux CI can come later.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    name: brew audit
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: brew audit --strict
+        run: brew audit --strict ./Formula/pentestswarm.rb
+
+  install:
+    name: brew install + test
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: brew install (downloads release binary, validates SHA)
+        run: brew install --formula ./Formula/pentestswarm.rb
+
+      - name: brew test (runs the formula's test block)
+        run: brew test pentestswarm
