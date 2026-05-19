@@ -105,7 +105,7 @@ jobs:
             desc "Swarm of AI agents for authorized penetration testing"
             homepage "https://github.com/Armur-Ai/Pentest-Swarm-AI"
             version "${version}"
-            license "Apache-2.0"
+            license "AGPL-3.0-only"
 
             on_macos do
               on_arm do
