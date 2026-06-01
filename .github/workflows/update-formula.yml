@@ -132,6 +132,7 @@ jobs:
             def install
               binary = Dir["pentestswarm-*"].first
               bin.install binary => "pentestswarm"
+              chmod 0755, bin/"pentestswarm"
 
               # Shell completions — Cobra auto-registers a \`completion <shell>\`
               # subcommand on the binary; Homebrew's helper invokes it and
